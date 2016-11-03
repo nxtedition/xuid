@@ -1,5 +1,5 @@
 {
-  "name": "nuid",
+  "name": "xuid",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Robert Nagy <robert.nagy@boffins.se>",
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/nxtedition/nuid.git"
+    "url": "https://github.com/nxtedition/xuid.git"
   },
   "license": "MIT",
   "dependencies": {
