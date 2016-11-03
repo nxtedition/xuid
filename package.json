@@ -1,0 +1,21 @@
+{
+  "name": "nuid",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Robert Nagy <robert.nagy@boffins.se>",
+  "keywords": [
+    "id",
+    "guid",
+    "uid",
+    "unique id",
+    "uuid"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nxtedition/nuid.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "randombytes": "2.0.3"
+  }
+}
