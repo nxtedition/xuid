@@ -17,7 +17,11 @@ function decode (str) {
   var number = 0
 
   for (var n = 0; n < str.length; ++n) {
-    number = ALPHABET.indexOf(str[n]) + (number * 64)
+    const i = ALPHABET.indexOf(str[n])
+    if (i === -1) {
+      return undefined
+    }
+    number = i + (number * 64)
   }
 
   return number
@@ -36,7 +40,8 @@ function xuid () {
 
 xuid.create = xuid
 xuid.date = function (id) {
-  return new Date(decode(id.slice(0, 7)))
+  const number = id && id.length === 14 && decode(id.slice(0, 7))
+  return number ? new Date(number) : undefined
 }
 
 module.exports = xuid
