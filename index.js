@@ -41,7 +41,14 @@ function xuid () {
 xuid.create = xuid
 xuid.date = function (id) {
   const number = id && id.length === 14 && decode(id.slice(0, 7))
-  return number ? new Date(number) : undefined
+  if (!number) {
+    return undefined
+  }
+  const date = new Date(number)
+  if (date.getFullYear() > 2050 || date.getFullYear() < 2000) {
+    return undefined
+  }
+  return date
 }
 
 module.exports = xuid
