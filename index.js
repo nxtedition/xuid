@@ -1,7 +1,8 @@
 var randomBytes = require('randombytes')
 
 var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ~abcdefghijklmnopqrstuvwxyz_'
-var counter = 0
+var counter = parseInt(randomBytes(2).toString('hex'), 16)
+var max = decode('___')
 var time = Date.now()
 
 function encode (number) {
@@ -29,26 +30,21 @@ function decode (str) {
   return number
 }
 
-function pad2 (str) {
-  return str.length === 1 ? `0${str}` : str.slice(0, 2)
-}
-
-// [0-6: date, 7-8: counter, 9-13: random]
+// [0-6: date, 7-9: counter, 10-13: random]
 function xuid () {
   const now = Date.now()
 
-  counter = now === time ? counter + 1 : 0
-  time = now
-
-  var str = encode(now) +
-            pad2(encode(counter)) +
-            encode(parseInt(randomBytes(5).toString('hex'), 16))
-
-  while (str.length < 14) {
-    str = str + '0'
+  if (now !== time && counter > max / 2) {
+    counter = 0
+  } else {
+    counter += 1
   }
 
-  return str.substr(0, 14)
+  time = now
+
+  return encode(now).slice(0, 7) +
+         ('000' + encode(counter)).slice(-3) +
+         encode(parseInt(randomBytes(6).toString('hex'), 16)).slice(-4)
 }
 
 xuid.create = xuid
