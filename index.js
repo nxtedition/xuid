@@ -35,7 +35,7 @@ function xuid () {
   const now = Date.now()
 
   if (now !== time && counter > max / 2) {
-    counter = 0
+    counter = parseInt(randomBytes(2).toString('hex'), 16)
   } else {
     counter += 1
   }
