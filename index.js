@@ -1,6 +1,6 @@
 var randomBytes = require('randombytes')
 
-var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ~abcdefghijklmnopqrstuvwxyz_'
+var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~'
 var counter = parseInt(randomBytes(2).toString('hex'), 16)
 var max = decode('___')
 var time = Date.now()
