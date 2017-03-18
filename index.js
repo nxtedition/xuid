@@ -32,7 +32,18 @@ function decode (str) {
 
 // [0-6: date, 7-9: counter, 10-13: random]
 function xuid () {
-  const now = Date.now()
+  let now = Date.now()
+  let date = encode(now).slice(-7)
+  let random = ('000' + encode(counter)).slice(-3) +
+               encode(parseInt(randomBytes(6).toString('hex'), 16)).slice(-4)
+
+  if (arguments.length > 0) {
+    date = encode(arguments[0]).slice(-7)
+  }
+
+  if (arguments.length > 1) {
+    random = ('0000000' + encode(arguments[1])).slice(-7)
+  }
 
   if (now !== time && counter > max / 2) {
     counter = parseInt(randomBytes(2).toString('hex'), 16)
@@ -42,14 +53,12 @@ function xuid () {
 
   time = now
 
-  return encode(now).slice(0, 7) +
-         ('000' + encode(counter)).slice(-3) +
-         encode(parseInt(randomBytes(6).toString('hex'), 16)).slice(-4)
+  return date + random
 }
 
 xuid.create = xuid
 xuid.date = function (id) {
-  const number = id && id.length === 14 && decode(id.slice(0, 7))
+  const number = id && decode(id.slice(0, 7))
   if (!number) {
     return undefined
   }
