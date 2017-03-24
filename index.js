@@ -20,7 +20,7 @@ function decode (str) {
   var number = 0
 
   for (var n = 0; n < str.length; ++n) {
-    const i = ALPHABET.indexOf(str[n])
+    var i = ALPHABET.indexOf(str[n])
     if (i === -1) {
       return undefined
     }
@@ -32,9 +32,9 @@ function decode (str) {
 
 // [0-6: date, 7-9: counter, 10-13: random]
 function xuid () {
-  let now = Date.now()
-  let date = encode(now).slice(-7)
-  let random = ('000' + encode(counter)).slice(-3) +
+  var now = Date.now()
+  var date = encode(now).slice(-7)
+  var random = ('000' + encode(counter)).slice(-3) +
                encode(parseInt(randomBytes(6).toString('hex'), 16)).slice(-4)
 
   if (arguments.length > 0) {
@@ -58,11 +58,11 @@ function xuid () {
 
 xuid.create = xuid
 xuid.date = function (id) {
-  const number = id && decode(id.slice(0, 7))
+  var number = id && decode(id.slice(0, 7))
   if (!number) {
     return undefined
   }
-  const date = new Date(number)
+  var date = new Date(number)
   if (date.getFullYear() > 2050 || date.getFullYear() < 2000) {
     return undefined
   }
