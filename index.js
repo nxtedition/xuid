@@ -63,7 +63,8 @@ xuid.date = function (id) {
     return undefined
   }
   var date = new Date(number)
-  if (date.getFullYear() > 2050 || date.getFullYear() < 2000) {
+  var now = new Date()
+  if (date > now || date.getFullYear() < 2015) {
     return undefined
   }
   return date
