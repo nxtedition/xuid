@@ -28,7 +28,7 @@ function decode (str) {
 
 // [0-6: date, 7-9: counter, 10-13: random]
 function xuid (now) {
-  var now = now || Date.now()
+  var now = now || xuid.now()
   var date = encode(now).slice(-7)
   var random = ('000' + encode(counter)).slice(-3) +
     encode(parseInt(randomBytes(6).toString('hex'), 16)).slice(-4)
@@ -66,5 +66,7 @@ xuid.date = function (id) {
   }
   return date
 }
+
+xuid.now = () => Date.now()
 
 module.exports = xuid
