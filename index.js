@@ -27,8 +27,8 @@ function decode (str) {
 }
 
 // [0-6: date, 7-9: counter, 10-13: random]
-function xuid () {
-  var now = Date.now()
+function xuid (now) {
+  var now = now || Date.now()
   var date = encode(now).slice(-7)
   var random = ('000' + encode(counter)).slice(-3) +
     encode(parseInt(randomBytes(6).toString('hex'), 16)).slice(-4)
