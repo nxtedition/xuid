@@ -40,7 +40,7 @@ xuid.date = function (id) {
     return
   }
 
-  if (id.charCodeAt(0) >= 'S') {
+  if (id.charAt(0) < 'S') {
     return legacy.date(id)
   }
 
