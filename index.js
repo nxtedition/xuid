@@ -30,7 +30,7 @@ function xuid (now) {
   var date = encode(Number(now))
   var random = encode(parseInt(randomBytes(6).toString('hex'), 16))
 
-  return 'x' + date.slice(0, 7).padStart(7, '0') + random.slice(-6).padStart(6, '0')
+  return date.slice(0, 7).padStart(7, '0') + random.slice(-7).padStart(7, '0')
 }
 
 xuid.create = xuid
@@ -40,11 +40,11 @@ xuid.date = function (id) {
     return
   }
 
-  if (id.charAt(0) !== 'x') {
+  if (id.charCodeAt(0) >= 'S') {
     return legacy.date(id)
   }
 
-  var number = decode(id.slice(1, 8))
+  var number = decode(id.slice(0, 7))
   if (!number) {
     return
   }
