@@ -1,13 +1,36 @@
 var randomBytes = require('randombytes')
 var legacy = require('./legacy')
 
-// [x, 1-8: date, 9-13: random]
+var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+
+function encode (number) {
+  var str = ''
+  for (var n = 0; number > 0; ++n) {
+    str = ALPHABET[Math.floor(number % ALPHABET.length)] + str
+    number = Math.floor(number / ALPHABET.length)
+  }
+  return str
+}
+
+function decode (str) {
+  var number = 0
+  for (var n = 0; n < str.length; ++n) {
+    var i = ALPHABET.indexOf(str[n])
+    if (i === -1) {
+      return
+    }
+    number = i + number * ALPHABET.length
+  }
+  return number
+}
+
+// [x, 1-7: date, 8-13: random]
 function xuid (now) {
   var now = now || xuid.now()
-  var date = Number(now).toString(36)
-  var random = parseInt(randomBytes(6).toString('hex'), 16).toString(36)
+  var date = encode(Number(now))
+  var random = encode(parseInt(randomBytes(6).toString('hex'), 16))
 
-  return 'x' + date.slice(0, 8).padStart(8, '0') + random.slice(-5).padStart(5, '0')
+  return 'x' + date.slice(0, 7).padStart(7, '0') + random.slice(-6).padStart(6, '0')
 }
 
 xuid.create = xuid
@@ -21,7 +44,7 @@ xuid.date = function (id) {
     return legacy.date(id)
   }
 
-  var number = parseInt(id.slice(1, 9), 36)
+  var number = decode(id.slice(1, 8))
   if (!number) {
     return
   }

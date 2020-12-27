@@ -5,4 +5,5 @@ test('date', () => {
   const a = xuid(time)
   const b = xuid.date(a)
   expect(b).toStrictEqual(time)
+  expect(a.length).toStrictEqual(14)
 })
