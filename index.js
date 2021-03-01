@@ -31,7 +31,11 @@ function decode (str) {
 }
 
 // [1-7: date, 8-9: counter, 10-14: random]
-function xuid () {
+function xuid (x) {
+  if (x != null) {
+    throw new Error('xuid() does not take argument')
+  }
+
   var now = xuid.now ? xuid.now() : Date.now()
 
   if (counter >= MAX_COUNTER) {
