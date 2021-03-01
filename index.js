@@ -31,28 +31,32 @@ function decode (str) {
 }
 
 // [1-7: date, 8-9: counter, 10-14: random]
-function xuid (x) {
-  if (x != null) {
-    throw new Error('xuid() does not take argument')
-  }
+function xuid (now) {
+  if (!now) {
+    now = xuid.now ? xuid.now() : Date.now()
 
-  var now = xuid.now ? xuid.now() : Date.now()
-
-  if (counter >= MAX_COUNTER) {
-    for (var n = 0; time && now <= time; ++n) {
-      if (n > MAX_SPIN) {
-        throw new Error('bad xuid.now()')
+    if (counter >= MAX_COUNTER) {
+      for (var n = 0; time && now <= time; ++n) {
+        if (n > MAX_SPIN) {
+          throw new Error('bad xuid.now()')
+        }
+        now = xuid.now ? xuid.now() : Date.now()
       }
-      now = xuid.now ? xuid.now() : Date.now()
+      counter = 0
+    } else {
+      counter += 1
     }
-    counter = 0
+
+    time = now
   } else {
-    counter += 1
+    if (counter >= MAX_COUNTER) {
+      counter = 0
+    } else {
+      counter += 1
+    }
   }
 
-  time = now
-
-  var date = encode(time)
+  var date = encode(now)
   var count = encode(counter)
   var random = encode(parseInt(randomBytes(6).toString('hex'), 16))
 
