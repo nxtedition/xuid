@@ -2,6 +2,12 @@ var randomBytes = require('randombytes')
 var legacy = require('./legacy')
 
 var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+var MAX_COUNTER = decode('zz') // 3843
+var MAX_RANDOM = decode('zzzzz') // 916132831
+var MAX_SPIN = 4096 * 4096
+
+var counter = Math.floor(Math.random() * MAX_COUNTER)
+var time
 
 function encode (number) {
   var str = ''
@@ -24,13 +30,33 @@ function decode (str) {
   return number
 }
 
-// [x, 1-7: date, 8-13: random]
-function xuid (now) {
-  var now = now || xuid.now()
-  var date = encode(Number(now))
+// [1-7: date, 8-9: counter, 10-14: random]
+function xuid () {
+  var now = xuid.now ? xuid.now() : Date.now()
+
+  if (counter >= MAX_COUNTER) {
+    for (var n = 0; time && now <= time; ++n) {
+      if (n > MAX_SPIN) {
+        throw new Error('bad xuid.now()')
+      }
+      now = xuid.now ? xuid.now() : Date.now()
+    }
+    counter = 0
+  } else {
+    counter += 1
+  }
+
+  time = now
+
+  var date = encode(time)
+  var count = encode(counter)
   var random = encode(parseInt(randomBytes(6).toString('hex'), 16))
 
-  return date.slice(0, 7).padStart(7, '0') + random.slice(-7).padStart(7, '0')
+  return (
+    date.slice(0, 7).padStart(7, '0') +
+    count.slice(0, 2).padStart(2, '0') +
+    random.slice(0, 5).padStart(5, '0')
+  )
 }
 
 xuid.create = xuid
@@ -59,6 +85,9 @@ xuid.date = function (id) {
   return date
 }
 
-xuid.now = () => Date.now()
+xuid.now = null
+xuid.ALPHABET = ALPHABET
+xuid.MAX_COUNTER = MAX_COUNTER
+xuid.MAX_RANDOM = MAX_RANDOM
 
 module.exports = xuid
