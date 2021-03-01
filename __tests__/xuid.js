@@ -5,6 +5,12 @@ test('date', () => {
   expect(b).toStrictEqual(new Date('2020-12-27T16:02:42.177Z'))
 })
 
+test('date 2', () => {
+  const a = new Date()
+  const b = xuid.date(xuid())
+  expect(a).toStrictEqual(b)
+})
+
 test('order in same tick', () => {
   let prev = xuid()
   for (let n = 0; n < 1000; ++n) {
