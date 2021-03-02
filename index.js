@@ -6,7 +6,9 @@ var MAX_COUNTER = decode('zz') // 3843
 var MAX_RANDOM = decode('zzzzz') // 916132831
 var MAX_SPIN = 4096 * 4096
 
-var counter = Math.floor(Math.random() * MAX_COUNTER)
+var counter = 0
+var counterOffset = Math.floor(Math.random() * MAX_COUNTER)
+var counterTime = 0
 var time
 
 function encode (number) {
@@ -35,6 +37,11 @@ function xuid (now) {
   if (!now) {
     now = xuid.now ? xuid.now() : Date.now()
 
+    if (counterTime !== now) {
+      counter = 0
+      counterTime = now
+    }
+
     if (counter >= MAX_COUNTER) {
       for (var n = 0; time && now <= time; ++n) {
         if (n > MAX_SPIN) {
@@ -43,6 +50,7 @@ function xuid (now) {
         now = xuid.now ? xuid.now() : Date.now()
       }
       counter = 0
+      counterTime = now
     } else {
       counter += 1
     }
@@ -57,7 +65,7 @@ function xuid (now) {
   }
 
   var date = encode(now)
-  var count = encode(counter)
+  var count = encode((counter + counterOffset) % MAX_COUNTER)
   var random = encode(parseInt(randomBytes(6).toString('hex'), 16))
 
   return (
