@@ -1,4 +1,4 @@
-var randomBytes = require('randombytes')
+var getRandom = require('./random')
 var legacy = require('./legacy')
 
 var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
@@ -65,8 +65,8 @@ function xuid (now) {
   }
 
   var date = encode(now)
-  var count = encode((counter + counterOffset) % MAX_COUNTER)
-  var random = encode(parseInt(randomBytes(6).toString('hex'), 16))
+  var count = encode(counter + counterOffset)
+  var random = encode(getRandom(6))
 
   return (
     date.slice(0, 7).padStart(7, '0') +
