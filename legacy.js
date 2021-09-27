@@ -1,5 +1,3 @@
-var randomBytes = require('randombytes')
-
 var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~'
 
 function decode (str) {
