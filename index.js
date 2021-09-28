@@ -65,7 +65,7 @@ function xuid (now) {
 
   var date = encode(now)
   var count = encode(counter + counterOffset)
-  var random = encode(Math.random() * 916132831)
+  var random = encode(Math.random() * MAX_RANDOM)
 
   return (
     date.slice(0, 7).padStart(7, '0') +
