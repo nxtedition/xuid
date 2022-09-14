@@ -76,7 +76,7 @@ function xuid (now) {
 
 xuid.create = xuid
 
-xuid.date = function (id) {
+xuid.dateValue = function (id) {
   if (!id || typeof id !== 'string') {
     return
   }
@@ -90,6 +90,11 @@ xuid.date = function (id) {
     return
   }
 
+  return number
+}
+
+xuid.date = function (id) {
+  var number = xuid.dateValue(id)
   var date = new Date(number)
   var now = new Date(Date.now() + 86400000)
 
