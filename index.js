@@ -1,18 +1,18 @@
-var legacy = require('./legacy')
+const legacy = require('./legacy')
 
-var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-var MAX_COUNTER = decode('zz') // 3843
-var MAX_RANDOM = decode('zzzzz') // 916132831
-var MAX_SPIN = 4096 * 4096
+const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+const MAX_COUNTER = decode('zz') // 3843
+const MAX_RANDOM = decode('zzzzz') // 916132831
+const MAX_SPIN = 4096 * 4096
 
-var counter = 0
-var counterOffset = Math.floor(Math.random() * MAX_COUNTER)
-var counterTime = 0
-var time
+let counter = 0
+let counterOffset = Math.floor(Math.random() * MAX_COUNTER)
+let counterTime = 0
+let time
 
 function encode (number) {
-  var str = ''
-  for (var n = 0; number > 0; ++n) {
+  let str = ''
+  for (let n = 0; number > 0; ++n) {
     str = ALPHABET[Math.floor(number % ALPHABET.length)] + str
     number = Math.floor(number / ALPHABET.length)
   }
@@ -20,9 +20,9 @@ function encode (number) {
 }
 
 function decode (str) {
-  var number = 0
-  for (var n = 0; n < str.length; ++n) {
-    var i = ALPHABET.indexOf(str[n])
+  let number = 0
+  for (let n = 0; n < str.length; ++n) {
+    const i = ALPHABET.indexOf(str[n])
     if (i === -1) {
       return
     }
@@ -63,9 +63,9 @@ function xuid (now) {
     }
   }
 
-  var date = encode(now)
-  var count = encode(counter + counterOffset)
-  var random = encode(Math.random() * MAX_RANDOM)
+  const date = encode(now)
+  const count = encode(counter + counterOffset)
+  const random = encode(Math.random() * MAX_RANDOM)
 
   return (
     date.slice(0, 7).padStart(7, '0') +
@@ -85,7 +85,7 @@ xuid.dateValue = function (id) {
     return legacy.date(id)
   }
 
-  var number = decode(id.slice(0, 7))
+  const number = decode(id.slice(0, 7))
   if (!number) {
     return
   }
@@ -93,16 +93,19 @@ xuid.dateValue = function (id) {
   return number
 }
 
+const MIN_TIME = new Date(2015, 1, 1).valueOf()
+
 xuid.date = function (id) {
-  var number = xuid.dateValue(id)
-  var date = new Date(number)
-  var now = new Date(Date.now() + 86400000)
+  const number = xuid.dateValue(id)
+	if (!number || !Number.isFinite(number)) {
+		return
+	}
 
-  if (date > now || date.getFullYear() < 2015 || !Number.isFinite(date.valueOf())) {
-    return
-  }
+	if (number > Date.now() + 86400000 || number < MIN_TIME) {
+		return
+	}
 
-  return date
+  return new Date(number)
 }
 
 xuid.now = null
