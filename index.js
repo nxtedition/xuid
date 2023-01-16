@@ -98,7 +98,7 @@ xuid.date = function (id) {
   var date = new Date(number)
   var now = new Date(Date.now() + 86400000)
 
-  if (date > now || date.getFullYear() < 2015) {
+  if (date > now || date.getFullYear() < 2015 || !Number.isFinite(date.valueOf())) {
     return
   }
 
