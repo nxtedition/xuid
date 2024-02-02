@@ -22,7 +22,7 @@ function date (id) {
   if (date > now || date.getFullYear() < 2015) {
     return
   }
-  return date
+  return date.getTime()
 }
 
 module.exports = {
